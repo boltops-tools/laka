@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Laka::VERSION
   spec.authors       = ["Tung Nguyen"]
   spec.email         = ["tongueroo@gmail.com"]
-  spec.summary       = "Generated with cli-template tool. Please write a gem summary"
-  spec.description   = "Generated with cli-template tool. Write a longer description or delete this line."
+  spec.summary       = "Laka tool"
   spec.homepage      = ""
   spec.license       = "MIT"
 
