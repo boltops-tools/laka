@@ -3,12 +3,16 @@ module Laka
     class_option :verbose, type: :boolean
     class_option :noop, type: :boolean
 
-    desc "hello NAME", "Say hello to NAME."
-    long_desc Help.text(:hello)
-    option :from, desc: "from person"
-    def hello(name="you")
-      puts "from: #{options[:from]}" if options[:from]
-      puts "Hello #{name}"
+    desc "deploy DEPLOYMENT", "Deploy"
+    long_desc Help.text(:deploy)
+    def deploy(deployment)
+      Deploy.new(options.merge(deployment: deployment)).run
+    end
+
+    desc "resources DEPLOYMENT", "resources"
+    long_desc Help.text(:deploy)
+    def resources(deployment)
+      Resources.new(options.merge(deployment: deployment)).run
     end
 
     desc "completion *PARAMS", "Prints words for auto-completion."

@@ -18,8 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "aws-sdk-ec2"
   spec.add_dependency "activesupport"
+  spec.add_dependency "google-api-client"
   spec.add_dependency "memoist"
   spec.add_dependency "rainbow"
   spec.add_dependency "thor"
