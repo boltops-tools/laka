@@ -1,5 +1,6 @@
 module Laka
   class Base
+    include Laka::Config::Defaults
     include GcpServices
     extend Memoist
 
@@ -7,10 +8,5 @@ module Laka
       @options = options
       @deployment = @options[:deployment]
     end
-
-    def project
-      `gcloud config get-value project`.strip
-    end
-    memoize :project
   end
 end
