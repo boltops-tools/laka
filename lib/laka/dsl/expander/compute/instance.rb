@@ -5,7 +5,7 @@ module Laka::Dsl::Expander::Compute
     def expand
       network!
       sourceImage!
-      zone!
+      machineType!
       @props
     end
 
@@ -37,11 +37,11 @@ module Laka::Dsl::Expander::Compute
       end
     end
 
-    def zone!
-      zone = @props[:zone]
-      return unless zone
-      return if zone.include?(google_api_url) # noop
-      @props[:zone] = "#{google_api_url}/projects/#{project}/zones/#{zone}/machineTypes/#{zone}"
+    def machineType!
+      machineType = @props[:machineType]
+      return unless machineType
+      return if machineType.include?(google_api_url) # noop
+      @props[:machineType] = "#{google_api_url}/projects/#{project}/zones/#{zone}/machineTypes/#{machineType}"
     end
   end
 end

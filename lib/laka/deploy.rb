@@ -20,7 +20,7 @@ module Laka
     end
 
     def target
-      content = Dsl::Builder.new(@blueprint_root).build
+      content = Dsl::Builder.new(@deployment, @blueprint_root).build
       configuration = {config: {content: content}}
       GDM::TargetConfiguration.new(configuration)
     end

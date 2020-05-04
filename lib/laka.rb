@@ -1,4 +1,5 @@
 $:.unshift(File.expand_path("../", __FILE__))
+require "active_support/core_ext/hash"
 require "laka/version"
 require "memoist"
 require "rainbow/ext/string"
