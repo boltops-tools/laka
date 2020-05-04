@@ -11,7 +11,7 @@ module Laka
         print '.'
         sleep 1
       end
-      puts "Opeartion complete."
+      puts "\nOperation complete."
     end
   end
 end

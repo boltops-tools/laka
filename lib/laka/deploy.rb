@@ -20,7 +20,7 @@ module Laka
     end
 
     def target
-      content = File.read("#{@blueprint_root}/resources.yaml")
+      content = Dsl::Builder.new(@blueprint_root).build
       configuration = {config: {content: content}}
       GDM::TargetConfiguration.new(configuration)
     end
