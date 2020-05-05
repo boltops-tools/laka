@@ -1,8 +1,8 @@
-module Laka::Dsl
+class Laka::Dsl::Builder
   # TODO: put into gem
   module Evaluator
     def evaluate_file(path)
-      return unless path && File.exist?(path)
+      return unless path && File.file?(path)
       instance_eval(IO.read(path), path)
     rescue Exception => e
       evaluation_error(e)

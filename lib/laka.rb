@@ -3,6 +3,7 @@ require "active_support/core_ext/hash"
 require "laka/version"
 require "memoist"
 require "rainbow/ext/string"
+require "yaml"
 
 require "laka/autoloader"
 Laka::Autoloader.setup

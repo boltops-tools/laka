@@ -12,6 +12,7 @@ module Laka
         sleep 1
       end
       puts "\nOperation complete."
+      pp @operation
     end
   end
 end

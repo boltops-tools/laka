@@ -4,6 +4,7 @@ module Laka::Config
 
     # TODO: parse ~/.config/gcloud/configurations/config_default for speed
     def project
+      return "fake-project" if ENV["LAKA_TEST"]
       `gcloud config get-value project`.strip
     end
     memoize :project

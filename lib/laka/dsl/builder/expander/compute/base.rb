@@ -1,4 +1,4 @@
-module Laka::Dsl::Expander::Compute
+module Laka::Dsl::Builder::Expander::Compute
   class Base
     def initialize(props={})
       @props = props.dup

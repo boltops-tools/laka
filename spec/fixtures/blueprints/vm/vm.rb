@@ -1,6 +1,6 @@
-resource("demo-vm", "compute.v1.instance",
-  zone: "us-central1-a",
-  machineType: "f1-micro",
+resource(env("name"), "compute.v1.instance",
+  zone: properties("zone"),
+  machineType: properties("machineType"),
   disks: [
     deviceName: "boot",
     type: "PERSISTENT",
@@ -15,10 +15,10 @@ resource("demo-vm", "compute.v1.instance",
     automaticRestart: false,
   },
   networkInterfaces: [
-    network: "default",
-    accessConfigs: {
+    network: ref(properties("default")),
+    accessConfigs: [
       name: "External NAT",
       type: "ONE_TO_ONE_NAT"
-    }
+    ]
   ]
 )
