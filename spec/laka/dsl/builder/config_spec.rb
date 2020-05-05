@@ -9,10 +9,10 @@ describe Laka::Dsl::Builder::Config do
       result = builder.build
       yaml =<<~EOL
 imports:
-- vm.jinja
-- network.jinja
-- firewall.jinja
-- compute-engine.jinja
+- path: vm.jinja
+- path: network.jinja
+- path: firewall.jinja
+- path: compute-engine.jinja
 resources:
 - name: compute-engine-setup
   type: compute-engine.jinja

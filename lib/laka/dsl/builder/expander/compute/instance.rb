@@ -3,7 +3,6 @@ module Laka::Dsl::Builder::Expander::Compute
     include Laka::Config::Defaults
 
     def expand
-      network!
       sourceImage!
       machineType!
       @props
@@ -33,7 +32,7 @@ module Laka::Dsl::Builder::Expander::Compute
         next unless network
         next if network.include?(google_api_url) # noop
 
-        interface[:network] = "#{google_api_url}/projects/#{project}/global/networks/#{network}"
+        interface[:network] = "#{google_api_url}/projects/{{ env['project'] }}/global/networks/#{network}"
       end
     end
 
@@ -41,7 +40,7 @@ module Laka::Dsl::Builder::Expander::Compute
       machineType = @props[:machineType]
       return unless machineType
       return if machineType.include?(google_api_url) # noop
-      @props[:machineType] = "#{google_api_url}/projects/#{project}/zones/#{zone}/machineTypes/#{machineType}"
+      @props[:machineType] = "#{google_api_url}/projects/{{ env['project'] }}/zones/#{zone}/machineTypes/#{machineType}"
     end
   end
 end

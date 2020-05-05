@@ -22,7 +22,7 @@ class Laka::Dsl::Builder
     end
 
     def write(content)
-      yaml_file = @path.sub('.rb','.jinja').sub('app/','')
+      yaml_file = @path.sub('config.rb', 'config.yaml').sub('.rb','.jinja').sub('app/','')
       path = "output/#{yaml_file}"
       FileUtils.mkdir_p(File.dirname(path))
       IO.write(path, content)

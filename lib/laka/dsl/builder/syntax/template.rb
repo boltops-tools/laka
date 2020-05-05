@@ -4,9 +4,9 @@ module Laka::Dsl::Builder::Syntax
       props = expand(type, props)
       resource = {
         name: name,
-        type: type,
-        properties: props
+        type: adjust_type(type),
       }
+      resource[:properties] = props unless props.empty?
       @template_resources << resource
     end
 
@@ -24,6 +24,10 @@ module Laka::Dsl::Builder::Syntax
       product, _, resource = type.split('.').map(&:camelize) # compute.v1.network
       klass = "Laka::Dsl::Builder::Expander::#{product}::#{resource}"
       klass.constantize rescue nil
+    end
+
+    def adjust_type(type)
+      type.include?('.') ? type : "#{type}.jinja"
     end
   end
 end

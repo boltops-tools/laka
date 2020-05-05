@@ -14,12 +14,17 @@ module Laka::Dsl
     end
 
     def self.build_all(deployment)
+      clean
       blueprint_root = "app/blueprints/#{deployment}"
       Dir.glob("#{blueprint_root}/**/*.rb").each do |full_path|
         next unless File.file?(full_path)
         builder = new(deployment, blueprint_root, full_path)
         builder.build
       end
+    end
+
+    def self.clean
+      FileUtils.rm_rf("output")
     end
   end
 end

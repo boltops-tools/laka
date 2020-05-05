@@ -10,22 +10,21 @@ describe Laka::Dsl::Builder::Template do
       yaml =<<~EOL
 resources:
 - name: vm-1
-  type: vm
+  type: vm.jinja
   properties:
     machineType: f1-micro
     zone: us-central1-f
     network: demo-network
 - name: vm-2
-  type: vm
+  type: vm.jinja
   properties:
     machineType: g1-small
     zone: us-central1-f
     network: demo-network
 - name: demo-network
-  type: network
-  properties: {}
+  type: network.jinja
 - name: demo-network-firewall
-  type: firewall
+  type: firewall.jinja
   properties:
     network: demo-network
       EOL
