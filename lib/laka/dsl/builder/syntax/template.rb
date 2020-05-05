@@ -1,5 +1,5 @@
-class Laka::Dsl::Builder::Template
-  module Syntax
+module Laka::Dsl::Builder::Syntax
+  module Template
     def resource(name, type, props={})
       props = expand(type, props)
       resource = {

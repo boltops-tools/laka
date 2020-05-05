@@ -1,6 +1,6 @@
 class Laka::Dsl::Builder
   class Template < Base
-    include Syntax
+    include Syntax::Template
 
     # File.read("#{@blueprint_root}/vm.yaml") # for testing
     def build

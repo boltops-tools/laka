@@ -1,4 +1,4 @@
-module Laka::Dsl::Builder::Common
+module Laka::Dsl::Builder::Syntax
   module Helpers
     def env(key)
       "{{ env['#{key}'] }}"

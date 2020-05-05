@@ -1,5 +1,5 @@
-class Laka::Dsl::Builder::Config
-  module Syntax
+module Laka::Dsl::Builder::Syntax
+  module Config
     def import(*templates)
       templates.flatten!
       templates.each do |template|

@@ -1,6 +1,6 @@
 class Laka::Dsl::Builder
   class Config < Base
-    include Syntax
+    include Syntax::Config
 
     attr_reader :imports
     def initialize(*)
