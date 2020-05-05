@@ -1,32 +1,97 @@
 # Laka
 
 [![Gem Version](https://badge.fury.io/rb/laka.png)](http://badge.fury.io/rb/laka)
-[![CircleCI](https://circleci.com/gh/USER/laka.svg?style=svg)](https://circleci.com/gh/USER/laka)
-[![Dependency Status](https://gemnasium.com/USER/laka.png)](https://gemnasium.com/USER/laka)
-[![Coverage Status](https://coveralls.io/lakas/USER/laka/badge.png)](https://coveralls.io/r/USER/laka)
-[![Join the chat at https://gitter.im/USER/laka](https://badges.gitter.im/USER/laka.svg)](https://gitter.im/USER/laka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Support](https://img.shields.io/badge/get-support-blue.svg)](https://boltops.com?utm_source=badge&utm_medium=badge&utm_campaign=laka)
 
-TODO: Write a gem description
+Google Deployment Manager DSL.
 
 ## Usage
 
-    laka hello yourname
-    laka sub:goodbye yourname
+    $ laka generate vm
+    Ouput written to output/blueprints/vm/firewall.jinja
+    Ouput written to output/blueprints/vm/network.jinja
+    Ouput written to output/blueprints/vm/config.yaml
+    Ouput written to output/blueprints/vm/vm.jinja
+    Ouput written to output/blueprints/vm/compute-engine.jinja
+    $
 
-The CLI tool also detects and tasks in the current folder's Rakefile and delegate to those tasks.
+## Example Structure
+
+    $ tree app/blueprints/vm
+    app/blueprints/vm
+    ├── compute-engine.rb
+    ├── config.rb
+    ├── firewall.rb
+    ├── network.rb
+    └── vm.rb
+
+## DSL
+
+app/blueprints/vm/config.rb
+
+```ruby
+import(
+  "vm",
+  "compute-engine",
+)
+resource(
+  name: "compute-engine-setup",
+  type: "compute-engine"
+)
+```
+
+app/blueprints/vm/compute-engine.rb
+
+```ruby
+@network_name = "demo-network"
+
+resource("vm-1", "vm",
+  machineType: "f1-micro",
+  zone: "us-central1-f",
+  network: @network_name,
+)
+resource("vm-2", "vm",
+  machineType: "g1-small",
+  zone: "us-central1-f",
+  network: @network_name,
+)
+resource(@network_name, "network")
+resource("#{@network_name}-firewall", "firewall",
+  network: @network_name
+)
+```
+
+app/blueprints/vm/vm.rb
+
+```ruby
+resource(env("name"), "compute.v1.instance",
+  zone: properties("zone"),
+  machineType: "https://www.googleapis.com/compute/v1/projects/#{env("project")}/zones/#{properties("zone")}/machineTypes/#{properties("machineType")}",
+  disks: [
+    deviceName: "boot",
+    type: "PERSISTENT",
+    boot: true,
+    autoDelete: true,
+    initializeParams: {
+      sourceImage: "debian-9"
+    }
+  ],
+  scheduling: {
+    preemptible: true,
+    automaticRestart: false,
+  },
+  networkInterfaces: [
+    network: ref(properties("network")),
+    accessConfigs: [
+      name: "External NAT",
+      type: "ONE_TO_ONE_NAT"
+    ]
+  ]
+)
+```
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem "laka"
-
-And then execute:
-
-    bundle
-
-Or install it yourself as:
+Install with:
 
     gem install laka
 
