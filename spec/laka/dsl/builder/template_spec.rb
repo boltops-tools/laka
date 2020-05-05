@@ -80,8 +80,9 @@ resources:
   type: compute.v1.instance
   properties:
     zone: "{{ properties['zone'] }}"
-    machineType: https://www.googleapis.com/compute/v1/projects/fake-project/zones/us-central1-a/machineTypes/{{
-      properties['machineType'] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env['project']
+      }}/zones/{{ properties['zone'] }}/machineTypes/{{ properties['machineType']
+      }}
     disks:
     - deviceName: boot
       type: PERSISTENT
@@ -93,8 +94,7 @@ resources:
       preemptible: true
       automaticRestart: false
     networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/fake-project/global/networks/$(ref.{{
-        properties['default'] }}.selfLink)
+    - network: "$(ref.{{ properties['network'] }}.selfLink)"
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
