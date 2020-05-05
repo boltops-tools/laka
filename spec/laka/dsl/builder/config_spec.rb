@@ -8,9 +8,16 @@ describe Laka::Dsl::Builder::Config do
     it "evaluate" do
       result = builder.build
       yaml =<<~EOL
+imports:
+- vm.jinja
+- network.jinja
+- firewall.jinja
+- compute-engine.jinja
+resources:
+- name: compute-engine-setup
+  type: compute-engine.jinja
       EOL
-      puts result
-      # expect(result).to eq(yaml)
+      expect(result).to eq(yaml)
     end
   end
 end

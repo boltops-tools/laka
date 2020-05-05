@@ -8,7 +8,12 @@ module Laka::Dsl::Builder::Syntax
     end
 
     def import_template(template)
-      @imports << template
+      @template_imports << template
+    end
+
+    def resource(*list)
+      list.flatten
+      @template_resources += list
     end
   end
 end

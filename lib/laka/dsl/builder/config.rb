@@ -5,28 +5,25 @@ class Laka::Dsl::Builder
     attr_reader :imports
     def initialize(*)
       super
-      @imports = []
+      @template_imports = []
     end
 
-    # File.read("#{@blueprint_root}/config.yaml") # for testing
-    def build
-      evaluate_file(@path)
-      content = build_content
-      write(content)
-      content
-    end
+    def template
+      # Add .jinja extension
+      imports = @template_imports.map do |v|
+        v.include?(".jinja") ? v : "#{v}.jinja"
+      end
+      resources = @template_resources.map do |h|
+        type = h[:type]
+        h[:type] = "#{type}.jinja" unless type.include?('.jinja')
+        h
+      end
 
-    def build_content
-      template = {"resources" => @resources.map(&:deep_stringify_keys)}
-      YAML.dump(template).gsub("---\n", '')
-    end
-
-    def write(content)
-      yaml_file = @path.sub('.rb','.yaml')
-      path = "output/#{@deployment}/#{yaml_file}"
-      FileUtils.mkdir_p(File.dirname(path))
-      IO.write(path, content)
-      puts "Ouput written to #{path}" unless ENV['LAKA_TEST']
+      resources = resources.map(&:deep_stringify_keys)
+      {
+        "imports" => imports,
+        "resources" => resources,
+      }
     end
   end
 end

@@ -7,7 +7,7 @@ module Laka::Dsl::Builder::Syntax
         type: type,
         properties: props
       }
-      @resources << resource
+      @template_resources << resource
     end
 
     # props = Expander::Compute::Instance.new(props).expand

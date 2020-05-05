@@ -3,6 +3,74 @@ describe Laka::Dsl::Builder::Template do
   let(:deployment)     { "vm" }
   let(:blueprint_root) { "spec/fixtures/blueprints/vm" }
 
+  context "compute-engine" do
+    let(:path) { "spec/fixtures/blueprints/vm/compute-engine.rb" }
+    it "evaluate" do
+      result = builder.build
+      yaml =<<~EOL
+resources:
+- name: vm-1
+  type: vm
+  properties:
+    machineType: f1-micro
+    zone: us-central1-f
+    network: demo-network
+- name: vm-2
+  type: vm
+  properties:
+    machineType: g1-small
+    zone: us-central1-f
+    network: demo-network
+- name: demo-network
+  type: network
+  properties: {}
+- name: demo-network-firewall
+  type: firewall
+  properties:
+    network: demo-network
+      EOL
+      expect(result).to eq(yaml)
+    end
+  end
+
+  context "firewall" do
+    let(:path) { "spec/fixtures/blueprints/vm/firewall.rb" }
+    it "evaluate" do
+      result = builder.build
+      yaml =<<~EOL
+resources:
+- name: "{{ env['name'] }}"
+  type: compute.v1.firewall
+  properties:
+    network: "$(ref.{{ properties['network'] }}.selfLink)"
+    sourceRanges:
+    - 0.0.0.0/0
+    allowed:
+    - IPProtocol: TCP
+      ports:
+      - '80'
+      EOL
+      expect(result).to eq(yaml)
+    end
+  end
+
+  context "network" do
+    let(:path) { "spec/fixtures/blueprints/vm/network.rb" }
+    it "evaluate" do
+      result = builder.build
+      yaml =<<~EOL
+resources:
+- name: "{{ env['name'] }}"
+  type: compute.v1.network
+  properties:
+    routingConfig:
+      routingMode: REGIONAL
+    autoCreateSubnetworks: true
+      EOL
+      expect(result).to eq(yaml)
+    end
+  end
+
   context "vm" do
     let(:path) { "spec/fixtures/blueprints/vm/vm.rb" }
     it "evaluate" do
@@ -31,44 +99,6 @@ resources:
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
-      EOL
-      expect(result).to eq(yaml)
-    end
-  end
-
-  context "network" do
-    let(:path) { "spec/fixtures/blueprints/vm/network.rb" }
-    it "evaluate" do
-      result = builder.build
-      yaml =<<~EOL
-resources:
-- name: "{{ env['name'] }}"
-  type: compute.v1.network
-  properties:
-    routingConfig:
-      routingMode: REGIONAL
-    autoCreateSubnetworks: true
-      EOL
-      expect(result).to eq(yaml)
-    end
-  end
-
-  context "firewall" do
-    let(:path) { "spec/fixtures/blueprints/vm/firewall.rb" }
-    it "evaluate" do
-      result = builder.build
-      yaml =<<~EOL
-resources:
-- name: "{{ env['name'] }}"
-  type: compute.v1.firewall
-  properties:
-    network: "$(ref.{{ properties['network'] }}.selfLink)"
-    sourceRanges:
-    - 0.0.0.0/0
-    allowed:
-    - IPProtocol: TCP
-      ports:
-      - '80'
       EOL
       expect(result).to eq(yaml)
     end
