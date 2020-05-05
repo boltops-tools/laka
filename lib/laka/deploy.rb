@@ -35,8 +35,7 @@ module Laka
       puts "Within dir: #{dir}"
       Dir.chdir(dir) do
         success = system(command)
-        raise("ERROR: running command #{command}").color(:red) unless success
-        success
+        exit $?.exitstatus unless success
       end
     end
   end
