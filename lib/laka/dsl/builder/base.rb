@@ -22,8 +22,8 @@ class Laka::Dsl::Builder
     end
 
     def write(content)
-      yaml_file = @path.sub('.rb','.jinja')
-      path = "output/#{@deployment}/#{yaml_file}"
+      yaml_file = @path.sub('.rb','.jinja').sub('app/','')
+      path = "output/#{yaml_file}"
       FileUtils.mkdir_p(File.dirname(path))
       IO.write(path, content)
       puts "Ouput written to #{path}" unless ENV['LAKA_TEST']

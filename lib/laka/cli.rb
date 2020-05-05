@@ -9,6 +9,12 @@ module Laka
       Deploy.new(options.merge(deployment: deployment)).run
     end
 
+    desc "generate DEPLOYMENT", "Generate"
+    long_desc Help.text(:generate)
+    def generate(deployment)
+      Generate.new(options.merge(deployment: deployment)).run
+    end
+
     desc "resources DEPLOYMENT", "resources"
     long_desc Help.text(:deploy)
     def resources(deployment)
