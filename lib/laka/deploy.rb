@@ -1,40 +1,43 @@
+ENV['GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS'] = '1'
+
 module Laka
   class Deploy < Base
     def run
+      Generate.new(@options).run
+
       @blueprint_root = "app/blueprints/#{@deployment}"
 
-      operation = exist? ? update : create
-      waiter = Waiter.new(operation)
-      waiter.run
-      Resources.new(@options).run
+      exist? ? update : create
     end
 
     def update
-      new_deployment = GDM::Deployment.new(target: target, name: @deployment, fingerprint: deployment.fingerprint)
-      deployment_manager.update_deployment(project, @deployment, new_deployment)
+      gcloud_deploy("update #{@deployment} --config config.yaml -q")
     end
 
     def create
-      new_deployment = GDM::Deployment.new(target: target, name: @deployment)
-      deployment_manager.insert_deployment(project, new_deployment)
-    end
-
-    def target
-      content = Dsl::Builder.new(@deployment, @blueprint_root).build
-      configuration = {config: {content: content}}
-      GDM::TargetConfiguration.new(configuration)
-    end
-
-    def deployment
-      deployment_manager.get_deployment(project, @deployment)
+      gcloud_deploy("create #{@deployment} --config config.yaml -q")
     end
 
     def exist?
-      deployment
+      deployment_manager.get_deployment(project, @deployment)
       true
     rescue Google::Apis::ClientError => e
       raise unless e.message.include?("not found")
       false
+    end
+
+
+    def gcloud_deploy(command)
+      command = "gcloud deployment-manager deployments #{command}"
+      puts "=> #{command}"
+
+      dir = "output/blueprints/#{@deployment}"
+      puts "Within dir: #{dir}"
+      Dir.chdir(dir) do
+        success = system(command)
+        raise("ERROR: running command #{command}").color(:red) unless success
+        success
+      end
     end
   end
 end
