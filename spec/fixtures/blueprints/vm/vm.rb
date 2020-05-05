@@ -1,6 +1,6 @@
 resource(env("name"), "compute.v1.instance",
   zone: properties("zone"),
-  machineType: properties("machineType"),
+  machineType: "https://www.googleapis.com/compute/v1/projects/#{env("project")}/zones/#{properties("zone")}/machineTypes/#{properties("machineType")}",
   disks: [
     deviceName: "boot",
     type: "PERSISTENT",
@@ -15,7 +15,7 @@ resource(env("name"), "compute.v1.instance",
     automaticRestart: false,
   },
   networkInterfaces: [
-    network: ref(properties("default")),
+    network: ref(properties("network")),
     accessConfigs: [
       name: "External NAT",
       type: "ONE_TO_ONE_NAT"
