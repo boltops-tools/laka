@@ -6,12 +6,34 @@ Google Deployment Manager DSL.
 
 ## Usage
 
+Generate:
+
     $ laka generate vm
     Ouput written to output/blueprints/vm/firewall.jinja
     Ouput written to output/blueprints/vm/network.jinja
     Ouput written to output/blueprints/vm/config.yaml
     Ouput written to output/blueprints/vm/vm.jinja
     Ouput written to output/blueprints/vm/compute-engine.jinja
+    $
+
+Deploy:
+
+    $ laka deploy vm
+    Ouput written to output/blueprints/vm/firewall.jinja
+    Ouput written to output/blueprints/vm/network.jinja
+    Ouput written to output/blueprints/vm/config.yaml
+    Ouput written to output/blueprints/vm/vm.jinja
+    Ouput written to output/blueprints/vm/compute-engine.jinja
+    => gcloud deployment-manager deployments update vm --config config.yaml -q
+    Within dir: output/blueprints/vm
+    The fingerprint of the deployment is Z1DTSWUHSN0B8EhHmHNQBA==
+    Waiting for update [operation-1588650386322-5a4de7df2f506-e7570d81-ae643ef4]...done.
+    Update operation operation-1588650386322-5a4de7df2f506-e7570d81-ae643ef4 completed successfully.
+    NAME                   TYPE                 STATE      ERRORS  INTENT
+    demo-network           compute.v1.network   COMPLETED  []
+    demo-network-firewall  compute.v1.firewall  COMPLETED  []
+    vm-1                   compute.v1.instance  COMPLETED  []
+    vm-2                   compute.v1.instance  COMPLETED  []
     $
 
 ## Example Structure
