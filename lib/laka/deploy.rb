@@ -1,5 +1,3 @@
-ENV['GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS'] = '1'
-
 module Laka
   class Deploy < Base
     def run
@@ -11,11 +9,11 @@ module Laka
     end
 
     def update
-      gcloud_deploy("update #{@deployment} --config config.yaml -q")
+      gcloud("update #{@deployment} --config config.yaml -q")
     end
 
     def create
-      gcloud_deploy("create #{@deployment} --config config.yaml -q")
+      gcloud("create #{@deployment} --config config.yaml -q")
     end
 
     def exist?
@@ -24,19 +22,6 @@ module Laka
     rescue Google::Apis::ClientError => e
       raise unless e.message.include?("not found")
       false
-    end
-
-
-    def gcloud_deploy(command)
-      command = "gcloud deployment-manager deployments #{command}"
-      puts "=> #{command}"
-
-      dir = "output/blueprints/#{@deployment}"
-      puts "Within dir: #{dir}"
-      Dir.chdir(dir) do
-        success = system(command)
-        exit $?.exitstatus unless success
-      end
     end
   end
 end

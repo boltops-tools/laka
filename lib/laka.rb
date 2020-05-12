@@ -1,3 +1,5 @@
+ENV['GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS'] = '1'
+
 $:.unshift(File.expand_path("../", __FILE__))
 require "active_support/core_ext/hash"
 require "laka/version"
